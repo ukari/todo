@@ -16,3 +16,14 @@ Available commands:
   version                  Print version
 
 ```
+
+## auto completion
+
+- for `bash`
+
+``` bash
+todo --bash-completion-script `which todo`| sudo tee /etc/bash_completion.d/todo
+```
+
+- for `zsh` use `--zsh-completion-script`
+- for `fish` sue `--fish-completion-script`
