@@ -49,7 +49,7 @@ listCommand :: Mod CommandFields Command
 listCommand = command "list" (info (pure List) (progDesc "List all unfinished tasks with index"))
 
 fineCommand :: Mod CommandFields Command
-fineCommand = command "fine" (info (Fine <$> argument auto idm) (progDesc "Finish a task specify by index"))
+fineCommand = command "fine" (info (Fine <$> argument auto (metavar "INDEX" <> showDefault <> help "Task index")) (progDesc "Finish a task specify by index"))
 
 gcCommand :: Mod CommandFields Command
 gcCommand = command "gc" (info (pure Gc) (progDesc "Collect garbage, which would clean all unused history"))
