@@ -4,5 +4,5 @@ module Todo.Command.Fine
 
 import Numeric.Natural
 
-fine :: FilePath -> Natural -> IO ()
-fine filepath index = print $ ['f','i','n', 'e'] <> show index
+fine :: FilePath -> [Natural] -> Bool -> IO ()
+fine filepath index isAll = print $ ['f','i','n', 'e'] <> show index
