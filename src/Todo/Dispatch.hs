@@ -16,6 +16,7 @@ import qualified System.IO.Streams as Streams
 import System.IO
 import System.Posix.User
 import Options.Applicative.Types
+import Data.Maybe
 
 data Command
   = Add !String
@@ -26,20 +27,16 @@ data Command
   deriving (Eq, Show)
 
 data Todo = Todo
-  { source :: !String
+  { source :: !(Maybe String)
   , cmd :: !Command
   } deriving (Eq, Show)
 
-defaultSource :: String
-defaultSource = "~/.todo"
-
 todo :: Parser Todo
-todo = Todo <$> strOption
+todo = Todo <$> (optional $ strOption
                 (  long "source"
                 <> short 's'
                 <> metavar "FILE"
-                <> value defaultSource
-                <> help ("Specify a storage file, default value is \"" <> defaultSource <> "\""))
+                <> help ("Specify a storage file")))
             <*> (hsubparser
                 $  addCommand
                 <> listCommand
@@ -70,14 +67,19 @@ versionCommand = command "version" (info (pure Version) (progDesc "Print version
 dispatch :: IO ()
 dispatch = do
   Todo {source, cmd} <- execParser todoOptions
-  checkSource source
-  commandDispatch source cmd
+  filepath <- sourceHandler source
+  checkSource filepath
+  commandDispatch filepath cmd
+
+sourceHandler :: Maybe FilePath -> IO (String)
+sourceHandler (Just filepath) = return filepath
+sourceHandler Nothing = do
+  UserEntry {homeDirectory} <- getLoginName >>= getUserEntryForName
+  return homeDirectory 
 
 checkSource :: FilePath -> IO ()
 checkSource filepath = do
   print filepath
-  UserEntry {homeDirectory} <- getLoginName >>= getUserEntryForName
-  print homeDirectory
 
 commandDispatch :: String -> Command -> IO ()
 commandDispatch source (Add task) = add source task
