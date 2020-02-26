@@ -12,12 +12,7 @@ import Todo.Command.Rollback
 import Todo.Command.Version
 import Options.Applicative
 import Numeric.Natural
-import System.IO.Streams (InputStream)
-import qualified System.IO.Streams as Streams
-import System.IO
 import System.Posix.User
-import Options.Applicative.Types
-import Data.Maybe
 
 data Command
   = Add !String
@@ -74,7 +69,6 @@ dispatch :: IO ()
 dispatch = do
   Todo {source, cmd} <- execParser todoOptions
   filepath <- sourceHandler source
-  checkSource filepath
   commandDispatch filepath cmd
 
 sourceHandler :: Maybe FilePath -> IO (String)
@@ -82,10 +76,6 @@ sourceHandler (Just filepath) = return filepath
 sourceHandler Nothing = do
   UserEntry {homeDirectory} <- getLoginName >>= getUserEntryForName
   return $ homeDirectory <> "/.todo"
-
-checkSource :: FilePath -> IO ()
-checkSource filepath = do
-  print filepath
 
 commandDispatch :: String -> Command -> IO ()
 commandDispatch source (Add task) = add source task
