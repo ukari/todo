@@ -81,7 +81,7 @@ sourceHandler :: Maybe FilePath -> IO (String)
 sourceHandler (Just filepath) = return filepath
 sourceHandler Nothing = do
   UserEntry {homeDirectory} <- getLoginName >>= getUserEntryForName
-  return homeDirectory 
+  return $ homeDirectory <> "/.todo"
 
 checkSource :: FilePath -> IO ()
 checkSource filepath = do
