@@ -21,7 +21,7 @@ data Command
   deriving (Eq, Show)
 
 data Todo = Todo
-  { opts :: !String
+  { source :: !String
   , cmd :: !Command
   } deriving (Eq, Show)
 
@@ -46,13 +46,13 @@ todoOptions :: ParserInfo Todo
 todoOptions = info (todo <**> helper) idm
 
 addCommand :: Mod CommandFields Command
-addCommand = command "add" (info (Add <$> strArgument (metavar "<TASK>" <> help "Task for finishing")) (progDesc "Add a todo task"))
+addCommand = command "add" (info (Add <$> strArgument (metavar "TASK" <> help "Task for finishing")) (progDesc "Add a todo task"))
 
 listCommand :: Mod CommandFields Command
 listCommand = command "list" (info (pure List) (progDesc "List all unfinished tasks with index"))
 
 fineCommand :: Mod CommandFields Command
-fineCommand = command "fine" (info (Fine <$> many (argument auto (metavar "<INDEX>" <> showDefault <> help "Task index"))
+fineCommand = command "fine" (info (Fine <$> many (argument auto (metavar "INDEX" <> showDefault <> help "Task index"))
                                          <*> switch ( long "all" <> short 'A' <> help "Fine all unfinished tasks" ))
                                (progDesc "Finish a task specify by index"))
 
@@ -64,8 +64,12 @@ versionCommand = command "version" (info (pure Version) (progDesc "Print version
 
 dispatch :: IO ()
 dispatch = do
-  Todo {opts, cmd} <- execParser todoOptions
-  commandDispatch opts cmd
+  Todo {source, cmd} <- execParser todoOptions
+  checkSource source
+  commandDispatch source cmd
+
+checkSource :: FilePath -> IO ()
+checkSource filepath = print 1
 
 commandDispatch :: String -> Command -> IO ()
 commandDispatch source (Add task) = add source task
