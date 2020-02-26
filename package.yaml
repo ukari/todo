@@ -28,7 +28,7 @@ library:
   source-dirs: src
   dependencies:
   - optparse-applicative
-  - io-streams
+  - streamly >= 0.7.0
   - unix
 
 executables:
