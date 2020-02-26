@@ -3,4 +3,4 @@ module Todo.Command.List
   ) where
 
 list :: FilePath -> IO ()
-list filepath = print ['l', 'i', 's', 't']
+list filepath = print "list"

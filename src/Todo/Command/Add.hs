@@ -3,4 +3,4 @@ module Todo.Command.Add
   ) where
 
 add :: FilePath -> String -> IO ()
-add filepath task = print ['a','d', 'd']
+add filepath task = print $ "add" <> task

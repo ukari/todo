@@ -8,6 +8,7 @@ import Todo.Command.Add
 import Todo.Command.List
 import Todo.Command.Fine
 import Todo.Command.Gc
+import Todo.Command.Rollback
 import Todo.Command.Version
 import Options.Applicative
 import Numeric.Natural
@@ -22,6 +23,7 @@ data Command
   = Add !String
   | List
   | Fine {idx :: ![Natural] , isAll :: !Bool}
+  | Rollback
   | Gc
   | Version
   deriving (Eq, Show)
@@ -41,6 +43,7 @@ todo = Todo <$> (optional $ strOption
                 $  addCommand
                 <> listCommand
                 <> fineCommand
+                <> rollbackCommand
                 <> gcCommand
                 <> versionCommand)
 
@@ -57,6 +60,9 @@ fineCommand :: Mod CommandFields Command
 fineCommand = command "fine" (info (Fine <$> many (argument auto (metavar "INDEX" <> showDefault <> help "Task index"))
                                          <*> switch (long "all" <> short 'A' <> help "Fine all unfinished tasks"))
                                (progDesc "Finish a task specify by index"))
+
+rollbackCommand :: Mod CommandFields Command
+rollbackCommand = command "rollback" (info (pure Rollback) (progDesc "Rollback permanently, can't do this after gc"))
 
 gcCommand :: Mod CommandFields Command
 gcCommand = command "gc" (info (pure Gc) (progDesc "Collect garbage, which would clean all unused history"))
@@ -85,5 +91,6 @@ commandDispatch :: String -> Command -> IO ()
 commandDispatch source (Add task) = add source task
 commandDispatch source List = list source
 commandDispatch source (Fine {idx, isAll}) = fine source idx isAll
+commandDispatch source Rollback = rollback source
 commandDispatch source Gc = gc source
 commandDispatch _ Version = version
