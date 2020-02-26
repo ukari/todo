@@ -64,7 +64,7 @@ dispatch = do
 
 commandDispatch :: String -> Command -> IO ()
 commandDispatch source (Add task) = add source task
-commandDispatch source (List) = list source
+commandDispatch source List = list source
 commandDispatch source (Fine idx) = fine source idx
-commandDispatch source (Gc) = gc source
-commandDispatch _ (Version) = version
+commandDispatch source Gc = gc source
+commandDispatch _ Version = version
