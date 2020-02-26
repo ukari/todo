@@ -28,6 +28,8 @@ library:
   source-dirs: src
   dependencies:
   - optparse-applicative
+  - io-streams
+  - unix
 
 executables:
   todo:

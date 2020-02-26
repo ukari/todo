@@ -11,6 +11,11 @@ import Todo.Command.Gc
 import Todo.Command.Version
 import Options.Applicative
 import Numeric.Natural
+import System.IO.Streams (InputStream)
+import qualified System.IO.Streams as Streams
+import System.IO
+import System.Posix.User
+import Options.Applicative.Types
 
 data Command
   = Add !String
@@ -53,7 +58,7 @@ listCommand = command "list" (info (pure List) (progDesc "List all unfinished ta
 
 fineCommand :: Mod CommandFields Command
 fineCommand = command "fine" (info (Fine <$> many (argument auto (metavar "INDEX" <> showDefault <> help "Task index"))
-                                         <*> switch ( long "all" <> short 'A' <> help "Fine all unfinished tasks" ))
+                                         <*> switch (long "all" <> short 'A' <> help "Fine all unfinished tasks"))
                                (progDesc "Finish a task specify by index"))
 
 gcCommand :: Mod CommandFields Command
@@ -69,7 +74,10 @@ dispatch = do
   commandDispatch source cmd
 
 checkSource :: FilePath -> IO ()
-checkSource filepath = print 1
+checkSource filepath = do
+  print filepath
+  UserEntry {homeDirectory} <- getLoginName >>= getUserEntryForName
+  print homeDirectory
 
 commandDispatch :: String -> Command -> IO ()
 commandDispatch source (Add task) = add source task

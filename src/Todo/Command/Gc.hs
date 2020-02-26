@@ -3,4 +3,6 @@ module Todo.Command.Gc
   ) where
 
 gc :: FilePath -> IO ()
-gc filepath = print ['g','c']
+gc filepath = do
+  print filepath
+  print ['g','c']
