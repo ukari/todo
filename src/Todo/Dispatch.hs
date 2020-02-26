@@ -29,18 +29,18 @@ defaultSource :: String
 defaultSource = "~/.todo"
 
 todo :: Parser Todo
-todo = Todo
-  <$> strOption
-      ( long "source"
-     <> short 's'
-     <> metavar "FILE"
-     <> value defaultSource
-     <> help ("Specify a storage file, default value is \"" <> defaultSource <> "\""))
-  <*> (hsubparser $ addCommand
-                 <> listCommand
-                 <> fineCommand
-                 <> gcCommand
-                 <> versionCommand)
+todo = Todo <$> strOption
+                (  long "source"
+                <> short 's'
+                <> metavar "FILE"
+                <> value defaultSource
+                <> help ("Specify a storage file, default value is \"" <> defaultSource <> "\""))
+            <*> (hsubparser
+                $  addCommand
+                <> listCommand
+                <> fineCommand
+                <> gcCommand
+                <> versionCommand)
 
 todoOptions :: ParserInfo Todo
 todoOptions = info (todo <**> helper) idm
