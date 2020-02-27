@@ -12,9 +12,9 @@ Available commands:
   add                      Add a todo task
   list                     List all unfinished tasks with index
   fine                     Finish a task specify by index
+  rollback                 Rollback permanently, can't do this after gc
   gc                       Collect garbage, which would clean all unused history
   version                  Print version
-
 ```
 
 ## auto completion
