@@ -10,9 +10,11 @@ import Todo.Command.Fine
 import Todo.Command.Gc
 import Todo.Command.Rollback
 import Todo.Command.Version
+import qualified Todo.Logger as Logger
 import Options.Applicative
 import Numeric.Natural
-import System.Posix.User
+import System.Posix (UserEntry (..), FileMode, getLoginName, getUserEntryForName, fileExist, createFile, closeFd, unionFileModes, ownerReadMode, ownerWriteMode, groupReadMode, groupWriteMode, otherReadMode)
+import Control.Monad (when)
 
 data Command
   = Add !String
@@ -69,6 +71,7 @@ dispatch :: IO ()
 dispatch = do
   Todo {source, cmd} <- execParser todoOptions
   filepath <- sourceHandler source
+  checkSource filepath
   commandDispatch filepath cmd
 
 sourceHandler :: Maybe FilePath -> IO (String)
@@ -76,6 +79,16 @@ sourceHandler (Just filepath) = return filepath
 sourceHandler Nothing = do
   UserEntry {homeDirectory} <- getLoginName >>= getUserEntryForName
   return $ homeDirectory <> "/.todo"
+
+checkSource :: FilePath -> IO ()
+checkSource source = do
+  exist <- fileExist source
+  when (not exist) $ do
+    Logger.log $ "Source FILE not exist, create " <> source
+    createFile source filemode >>= closeFd
+  where
+    filemode :: FileMode
+    filemode = foldr1 unionFileModes [ownerReadMode, ownerWriteMode, groupReadMode, groupWriteMode, otherReadMode]
 
 commandDispatch :: String -> Command -> IO ()
 commandDispatch source (Add task) = add source task

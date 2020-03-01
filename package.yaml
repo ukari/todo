@@ -28,8 +28,9 @@ library:
   source-dirs: src
   dependencies:
   - optparse-applicative
-  - streamly >= 0.7.0
   - unix
+  - megaparsec
+  - text
 
 executables:
   todo:
