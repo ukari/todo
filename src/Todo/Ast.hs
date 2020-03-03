@@ -1,4 +1,4 @@
-{-# LANGUAGE GADTs, StandaloneDeriving, OverloadedStrings, RecordWildCards #-}
+{-# LANGUAGE GADTs, StandaloneDeriving, OverloadedStrings, RecordWildCards, LambdaCase #-}
 
 module Todo.Ast
   ( Exp (..)
@@ -30,29 +30,15 @@ manyLineSpace = void $ takeWhileP Nothing f
 taskParser :: Parser (Exp Text)
 taskParser = Task <$> (char '\"' *> (takeWhile1P Nothing (/= '\"')) <* char '\"')
 
-todoParser :: Parser (Exp Text)
-todoParser = do
-  todo <- string "todo"
-  _ <- manyLineSpace
-  task <- taskParser
-  return $ Todo task
-
-undoParser :: Parser (Exp Text)
-undoParser = do
-  undo <- string "undo"
-  _ <- manyLineSpace
-  task <- taskParser
-  return $ Undo task
-
-doneParser :: Parser (Exp Text)
-doneParser = do
-  done <- string "done"
-  _ <- manyLineSpace
-  task <- taskParser
-  return $ Done task
-
 expParser :: Parser (Exp Text)
-expParser = todoParser <|> undoParser <|> doneParser
+expParser = do
+  action <- choice
+    [ Todo <$ string "todo"
+    , Undo <$ string "undo"
+    , Done <$ string "done" ]
+  void $ manyLineSpace
+  task <- taskParser
+  return $ action task
 
 expsParser :: Parser [Exp Text]
 expsParser = do
