@@ -1,16 +1,14 @@
 {-# LANGUAGE GADTs, StandaloneDeriving, OverloadedStrings, RecordWildCards #-}
 
 module Todo.Ast
-  (
+  ( Exp (..)
+  , expsParser
   ) where
 
 import Text.Megaparsec
 import Text.Megaparsec.Char
-import qualified Text.Megaparsec.Char.Lexer as Lexer
-import Data.Text.Lazy (Text, pack)
+import Data.Text.Lazy (Text)
 import Data.Void
-import Data.Text.Lazy.IO as T
-import Control.Applicative (Alternative)
 import Control.Monad
 
 data Exp r where
