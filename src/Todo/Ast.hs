@@ -36,7 +36,7 @@ manyLineSpace :: Parser ()
 manyLineSpace = void $ takeWhile1P Nothing f
   where
     f :: Char -> Bool
-    f x = (x == ' ') || (x == '\n') || (x == '\r') || (x == '\t') 
+    f x = (x == ' ') || (x == '\n') || (x == '\r') || (x == '\t')
 
 taskParser :: Parser (Exp Text)
 taskParser = Task <$> (char '\"' *> (takeWhile1P Nothing (/= '\"')) <* char '\"')
