@@ -1,4 +1,4 @@
-{-# LANGUAGE GADTs, StandaloneDeriving, OverloadedStrings, RecordWildCards, LambdaCase #-}
+{-# LANGUAGE GADTs, StandaloneDeriving, OverloadedStrings #-}
 
 module Todo.Ast
   ( Exp (..)
