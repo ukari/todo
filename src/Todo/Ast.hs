@@ -32,8 +32,14 @@ lexeme = Lexer.lexeme sc
 manySpace :: Parser ()
 manySpace = void $ takeWhile1P Nothing (== ' ')
 
+manyLineSpace :: Parser ()
+manyLineSpace = void $ takeWhile1P Nothing f
+  where
+    f :: Char -> Bool
+    f x = (x == ' ') || (x == '\n') || (x == '\r') || (x == '\t') 
+
 taskParser :: Parser (Exp Text)
-taskParser = Task <$> (char '\"' *> (takeWhile1P Nothing (/= '\"')))
+taskParser = Task <$> (char '\"' *> (takeWhile1P Nothing (/= '\"')) <* char '\"')
 
 todoParser :: Parser (Exp Text)
 todoParser = do
@@ -56,5 +62,15 @@ doneParser = do
   task <- taskParser
   return $ Done task
 
-expParser :: Parser [Exp Text]
-expParser = many ((todoParser <|> undoParser <|> doneParser))
+expParser :: Parser (Exp Text)
+expParser = todoParser <|> undoParser <|> doneParser
+
+expsParser :: Parser [Exp Text]
+expsParser = do
+  h <- optional expParser
+  t <- manyTill (manyLineSpace *> expParser) eof
+  return $ f h t
+  where
+    f :: Maybe (Exp Text) -> [Exp Text] -> [Exp Text]
+    f (Just he) ta = he : ta
+    f Nothing ta = ta
