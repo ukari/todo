@@ -23,17 +23,8 @@ deriving instance Show r => Show (Exp r)
 
 type Parser = Parsec Void Text
 
-sc :: Parser ()
-sc = Lexer.space space1 empty empty
-
-lexeme :: Parser a -> Parser a
-lexeme = Lexer.lexeme sc
-
-manySpace :: Parser ()
-manySpace = void $ takeWhile1P Nothing (== ' ')
-
 manyLineSpace :: Parser ()
-manyLineSpace = void $ takeWhile1P Nothing f
+manyLineSpace = void $ takeWhileP Nothing f
   where
     f :: Char -> Bool
     f x = (x == ' ') || (x == '\n') || (x == '\r') || (x == '\t')
@@ -44,21 +35,21 @@ taskParser = Task <$> (char '\"' *> (takeWhile1P Nothing (/= '\"')) <* char '\"'
 todoParser :: Parser (Exp Text)
 todoParser = do
   todo <- string "todo"
-  _ <- manySpace
+  _ <- manyLineSpace
   task <- taskParser
   return $ Todo task
 
 undoParser :: Parser (Exp Text)
 undoParser = do
   undo <- string "undo"
-  _ <- manySpace
+  _ <- manyLineSpace
   task <- taskParser
   return $ Undo task
 
 doneParser :: Parser (Exp Text)
 doneParser = do
   done <- string "done"
-  _ <- manySpace
+  _ <- manyLineSpace
   task <- taskParser
   return $ Done task
 
@@ -68,7 +59,7 @@ expParser = todoParser <|> undoParser <|> doneParser
 expsParser :: Parser [Exp Text]
 expsParser = do
   h <- optional expParser
-  t <- manyTill (manyLineSpace *> expParser) eof
+  t <- manyTill (manyLineSpace *> expParser <* manyLineSpace) eof
   return $ f h t
   where
     f :: Maybe (Exp Text) -> [Exp Text] -> [Exp Text]
