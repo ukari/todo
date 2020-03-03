@@ -74,7 +74,7 @@ dispatch = do
   checkSource filepath
   commandDispatch filepath cmd
 
-sourceHandler :: Maybe FilePath -> IO (String)
+sourceHandler :: Maybe FilePath -> IO String
 sourceHandler (Just filepath) = return filepath
 sourceHandler Nothing = do
   UserEntry {homeDirectory} <- getLoginName >>= getUserEntryForName
