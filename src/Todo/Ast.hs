@@ -1,4 +1,4 @@
-{-# LANGUAGE GADTs, OverloadedStrings, FlexibleInstances #-}
+{-# LANGUAGE GADTs, OverloadedStrings, FlexibleInstances, StandaloneDeriving #-}
 
 module Todo.Ast
   ( Exp (..)
@@ -24,6 +24,9 @@ instance Show (Exp Text) where
   show (Todo e) = "Todo ("<> show e <> ")"
   show (Undo e) = "Undo ("<> show e <> ")"
   show (Done e) = "Done ("<> show e <> ")"
+
+deriving instance Eq (Exp Text)
+deriving instance Ord (Exp Text)
 
 type Parser = Parsec Void Text
 
