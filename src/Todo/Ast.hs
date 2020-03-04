@@ -1,4 +1,4 @@
-{-# LANGUAGE GADTs, StandaloneDeriving, OverloadedStrings, FlexibleInstances #-}
+{-# LANGUAGE GADTs, OverloadedStrings, FlexibleInstances #-}
 
 module Todo.Ast
   ( Exp (..)
