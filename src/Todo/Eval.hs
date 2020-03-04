@@ -5,7 +5,7 @@ module Todo.Eval
   ) where
 
 import Todo.Ast
-import Data.Text.Lazy (Text, pack)
+import Data.Text.Lazy (Text)
 import Data.Sequence
 
 plain :: Exp Text -> Text
