@@ -1,4 +1,4 @@
-{-# LANGUAGE GADTs, StandaloneDeriving, OverloadedStrings #-}
+{-# LANGUAGE GADTs, StandaloneDeriving, OverloadedStrings, FlexibleInstances #-}
 
 module Todo.Ast
   ( Exp (..)
@@ -8,16 +8,22 @@ module Todo.Ast
 import Text.Megaparsec
 import Text.Megaparsec.Char
 import Data.Text.Lazy (Text)
+import Data.Text.Lazy.Encoding (encodeUtf8)
+import Data.ByteString.Lazy.UTF8 (toString)
 import Data.Void
 import Control.Monad
 
 data Exp r where
   Task :: Text -> Exp Text
-  Todo :: Exp r -> Exp r
-  Undo :: Exp r -> Exp r
-  Done :: Exp Text -> Exp Text
+  Todo :: Show r => Exp r -> Exp r
+  Undo :: Show r => Exp r -> Exp r
+  Done :: Show r => Exp r -> Exp r
 
-deriving instance Show r => Show (Exp r)
+instance Show (Exp Text) where
+  show (Task t) = "Task " <> (toString $ encodeUtf8 $ t)
+  show (Todo e) = "Todo ("<> show e <> ")"
+  show (Undo e) = "Undo ("<> show e <> ")"
+  show (Done e) = "Done ("<> show e <> ")"
 
 type Parser = Parsec Void Text
 
