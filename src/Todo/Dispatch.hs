@@ -35,7 +35,7 @@ todo = Todo <$> (optional $ strOption
                 (  long "source"
                 <> short 's'
                 <> metavar "FILE"
-                <> help ("Specify a storage file")))
+                <> help ("Specify a storage file") ))
             <*> (hsubparser
                 $  addCommand
                 <> listCommand
