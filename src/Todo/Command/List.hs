@@ -4,7 +4,7 @@ module Todo.Command.List
 
 import Todo.Parse
 import Todo.Eval
-import Todo.Formatter
+import Todo.Format
 import qualified Todo.Logger as Logger
 
 list :: FilePath -> IO ()

@@ -1,4 +1,4 @@
-module Todo.Formatter
+module Todo.Format
   ( format
   ) where
 
