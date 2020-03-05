@@ -7,6 +7,7 @@ module Todo.Eval
 import Todo.Ast
 import Data.Text.Lazy (Text)
 import Data.Sequence
+import Data.Foldable
 
 plain :: Exp Text -> Text
 plain (Task t) = t
@@ -24,8 +25,8 @@ eval (Done e) exps = done (elemIndexL (plain e) exps) exps
     done (Just idx) s = deleteAt idx s
     done Nothing s = s
 
-evaluate :: [Exp Text] -> Seq Text
-evaluate xs = foldl f empty xs
+evaluate :: [Exp Text] -> [Text]
+evaluate xs = toList $ foldl f empty xs
   where
     f :: Seq Text -> Exp Text -> Seq Text
     f acc cur = eval cur acc
