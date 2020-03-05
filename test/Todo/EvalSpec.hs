@@ -14,7 +14,7 @@ source =
   , Todo $ Task $ pack "test 2"
   , Done $ Task $ pack "test 0"
   , Todo $ Task $ pack "test 3"
-  , Done $ Task $ pack "test 1"]
+  , Done $ Task $ pack "test 1" ]
 
 source_bad :: [Exp Text]
 source_bad =
