@@ -23,12 +23,12 @@ data EvalException
   | IllegalTodoException
   | IllegalUndoException
   | IllegalDoneException
-  deriving (Show)
+  deriving (Show, Eq, Read)
 
 instance Exception EvalException
 
 check :: Exp Text -> Seq Text -> Either EvalException (Exp Text)
-check (Task t) _ = Left UnexceptedTaskException
+check (Task _) _ = Left UnexceptedTaskException
 check (Todo e) exps = case (elemIndexL (plain e) exps) of
   Nothing -> Right (Todo e)
   Just _ -> Left IllegalTodoException
