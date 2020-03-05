@@ -23,6 +23,7 @@ dependencies:
 - base >= 4.7 && < 5
 - Cabal
 - gitrev
+- hspec
 
 library:
   source-dirs: src
@@ -55,3 +56,4 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - todo
+    - text
