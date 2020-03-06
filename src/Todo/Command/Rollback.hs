@@ -29,4 +29,4 @@ rollback filepath = do
     tryRoll (Undo _) _ = Logger.log $ Error $ "can't rollback."
     tryRoll l ast = do
       T.writeFile filepath $ generate $ take ((genericLength ast) - 1) ast
-      Logger.log $ Info $ [qm|Last [{action l}] action revert.|]
+      Logger.log $ Info $ [qm|Latest [{action l}] action revert.|]
