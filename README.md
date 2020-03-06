@@ -30,9 +30,9 @@ todo --bash-completion-script `which todo`| sudo tee /etc/bash_completion.d/todo
 - for `fish` sue `--fish-completion-script`
 
 ## Forget it
-Keep pure might means cost a lot, it's immutable and there is a free time machine which could brings you came back to the past.
+Keeping pure might mean to cost a lot, it's immutable and there is a free time machine which could bring you came back to the past.
 
-Then you might be favour to turns to be impure, and sliencely forget everything you had done.
+Then, you might be favour to turn to be impure, and silently forget everything you had done.
 
 ``` bash
 alias todo='sh -c '\''todo "$@" ; todo gc > /dev/null 2>&1 '\'' _'
