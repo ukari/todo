@@ -11,7 +11,7 @@ import Data.List (intercalate)
 import Text.InterpolatedString.QM
 
 format :: Either EvalException [Text] -> String
-format (Left ex) = [qm|Error: {show ex}|]
+format (Left ex) = [qm|Error: {show ex}.|]
 format (Right exps) = format' exps
 
 format' :: [Text] -> String
