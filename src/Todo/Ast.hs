@@ -41,7 +41,6 @@ taskParser = Task <$> (char '\"' *> (takeWhile1P Nothing (/= '\"')) <* char '\"'
 
 expParser :: Parser (Exp Text)
 expParser = do
-  void $ manyLineSpace
   action <- choice
     [ Todo <$ string "todo"
     , Undo <$ string "undo"
@@ -53,10 +52,6 @@ expParser = do
 
 expsParser :: Parser [Exp Text]
 expsParser = do
-  h <- optional expParser
+  void $ manyLineSpace
   t <- manyTill expParser eof
-  return $ f h t
-  where
-    f :: Maybe (Exp Text) -> [Exp Text] -> [Exp Text]
-    f (Just he) ta = he : ta
-    f Nothing ta = ta
+  return t
