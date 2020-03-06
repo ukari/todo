@@ -1,3 +1,4 @@
+{-# LANGUAGE GADTs, QuasiQuotes, ScopedTypeVariables #-}
 module Todo.Format
   ( format
   ) where
@@ -7,8 +8,12 @@ import Data.Text.Lazy (Text)
 import Data.Text.Lazy.Encoding (encodeUtf8)
 import Data.ByteString.Lazy.UTF8 (toString)
 import Data.List (intercalate)
+import Text.InterpolatedString.QM
 
 format :: Either EvalException [Text] -> String
-format (Left ex) = show ex
-format (Right exps) = intercalate "\n" $
-  map (\(idx, cur) -> "~> " <> (show (idx::Int)) <> ". " <> (toString $ encodeUtf8 cur)) $ zip [0..] exps
+format (Left ex) = [qm|Error: {show ex}|]
+format (Right exps) = format' exps
+
+format' :: [Text] -> String
+format' exps = intercalate "\n" $
+  map (\(idx::Int, cur) -> [qm|~> {show idx}. {toString $ encodeUtf8 cur}|]) $ zip [0..] exps
