@@ -1,4 +1,5 @@
 # todo
+A minimalism pure todo list for terminal which could also turns to be impure as you wish.
 
 ## usage
 ```
@@ -27,3 +28,12 @@ todo --bash-completion-script `which todo`| sudo tee /etc/bash_completion.d/todo
 
 - for `zsh` use `--zsh-completion-script`
 - for `fish` sue `--fish-completion-script`
+
+## Forget it
+Keep pure might means cost a lot, it's immutable and there is a free time machine which could brings you came back to the past.
+
+Then you might be favour to turns to be impure, and sliencely forget everything you had done.
+
+``` bash
+alias todo='sh -c '\''todo "$@" ; todo gc > /dev/null 2>&1 '\'' _'
+```
