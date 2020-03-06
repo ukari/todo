@@ -7,7 +7,8 @@ module Todo.Ast
 
 import Text.Megaparsec
 import Text.Megaparsec.Char
-import Data.Text.Lazy (Text)
+import qualified Text.Megaparsec.Char.Lexer as Lexer
+import Data.Text.Lazy (Text, pack)
 import Data.Text.Lazy.Encoding (encodeUtf8)
 import Data.ByteString.Lazy.UTF8 (toString)
 import Data.Void
@@ -36,8 +37,13 @@ manyLineSpace = void $ takeWhileP Nothing f
     f :: Char -> Bool
     f x = (x == ' ') || (x == '\n') || (x == '\r') || (x == '\t')
 
+stringLiteral :: Parser Text
+stringLiteral = do
+  s <- char '\"' >> manyTill Lexer.charLiteral (char '\"')
+  return $ pack s
+
 taskParser :: Parser (Exp Text)
-taskParser = Task <$> (char '\"' *> (takeWhile1P Nothing (/= '\"')) <* char '\"')
+taskParser = Task <$> stringLiteral
 
 expParser :: Parser (Exp Text)
 expParser = do
