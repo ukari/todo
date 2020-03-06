@@ -1,5 +1,5 @@
 # todo
-A minimalism pure todo list for terminal which could also turns to be impure as you wish.
+A minimalist pure todo list for terminal which could also turns to be impure as you wish.
 
 ## usage
 ```
