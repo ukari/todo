@@ -34,6 +34,8 @@ library:
   - text
   - utf8-string
   - containers
+  - qm-interpolated-string
+  - either
 
 executables:
   todo:
