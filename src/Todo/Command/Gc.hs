@@ -8,6 +8,7 @@ import Todo.Ast
 import Todo.Parse
 import Todo.Eval
 import Todo.Generate
+import Todo.Logger (Log (..))
 import qualified Todo.Logger as Logger
 import Data.Text.Lazy (Text)
 import qualified Data.Text.Lazy.IO as T
@@ -27,4 +28,4 @@ gc' :: FilePath -> [Text] -> IO ()
 gc' filepath ts = T.writeFile filepath $ generate $ map (Undo . Task) ts
 
 gcReport :: Integer -> IO ()
-gcReport i = Logger.log [qm|[{i} history actions] collected.|]
+gcReport i = Logger.log $ Info $ [qm|[{i} history actions] collected.|]

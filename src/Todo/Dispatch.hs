@@ -10,6 +10,7 @@ import Todo.Command.Fine
 import Todo.Command.Gc
 import Todo.Command.Rollback
 import Todo.Command.Version
+import Todo.Logger (Log (..))
 import qualified Todo.Logger as Logger
 import Options.Applicative
 import Numeric.Natural
@@ -54,7 +55,7 @@ listCommand :: Mod CommandFields Command
 listCommand = command "list" (info (pure List) (progDesc "List all unfinished tasks with index"))
 
 fineCommand :: Mod CommandFields Command
-fineCommand = command "fine" (info (Fine <$> many (argument auto (metavar "INDEX" <> showDefault <> help "Task index"))
+fineCommand = command "fine" (info (Fine <$> many (argument auto (metavar "INDEX.." <> showDefault <> help "Task index"))
                                          <*> switch (long "all" <> short 'A' <> help "Fine all unfinished tasks"))
                                (progDesc "Finish a task specify by index"))
 
@@ -84,7 +85,7 @@ checkSource :: FilePath -> IO ()
 checkSource source = do
   exist <- fileExist source
   when (not exist) $ do
-    Logger.log $ "Source FILE not exist, create " <> source
+    Logger.log $ Info $ "Source FILE not exist, create " <> source
     createFile source filemode >>= closeFd
   where
     filemode :: FileMode

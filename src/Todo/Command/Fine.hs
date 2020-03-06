@@ -9,6 +9,7 @@ import Todo.Parse
 import Todo.Eval
 import Todo.Format
 import Todo.Generate
+import Todo.Logger (Log (..))
 import qualified Todo.Logger as Logger
 import Data.Text.Lazy (Text)
 import qualified Data.Text.Lazy.IO as T
@@ -35,7 +36,7 @@ fine1' :: [Text] -> Integer -> Text
 fine1' exps idx = gene $ Done $ Task $ exps !! fromIntegral idx
 
 fineReport :: Integer -> IO ()
-fineReport i = Logger.log $ [qm|[{i} tasks] has been fine.|]
+fineReport i = Logger.log $ Info $ [qm|[{i} tasks] has been fine.|]
 
 fineReportE :: Integer -> IO ()
-fineReportE i = Logger.log $ [qm|Error task number {i}.|]
+fineReportE i = Logger.log $ Error $ [qm|illegal task number {i}.|]

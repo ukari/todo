@@ -19,7 +19,7 @@ gene (Done e) = [qm|done "{gene e}"\n|]
 action :: Exp Text -> Text
 action (Todo _) = pack "add"
 action (Done _) = pack "fine"
-action _ = error "shouldn't run here"
+action _ = error "unsupport action"
 
 generate :: [Exp Text] -> Text
 generate exps = foldl f empty exps
