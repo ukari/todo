@@ -7,7 +7,6 @@ module Todo.Command.Gc
 import Todo.Ast
 import Todo.Parse
 import Todo.Eval
-import Todo.Format
 import Todo.Generate
 import qualified Todo.Logger as Logger
 import Data.Text.Lazy (Text)
