@@ -93,7 +93,7 @@ checkSource source = do
 commandDispatch :: String -> Command -> IO ()
 commandDispatch source (Add task) = add source task
 commandDispatch source List = list source
-commandDispatch source (Fine {idx, isAll}) = fine source idx isAll
+commandDispatch source (Fine {idx, isAll}) = fine source (map fromIntegral idx) isAll
 commandDispatch source Rollback = rollback source
 commandDispatch source Gc = gc source
 commandDispatch _ Version = version
