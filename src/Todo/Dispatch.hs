@@ -38,7 +38,7 @@ todo = Todo <$> (optional $ strOption
                 (  long "source"
                 <> short 's'
                 <> metavar "FILE"
-                <> help ("Specify a storage file. (Default) Find " <> defaultStorageName <> " from local directory to parent until the user home.") ))
+                <> help ("Specify a storage file") ))
             <*> (hsubparser
                 $  addCommand
                 <> listCommand
