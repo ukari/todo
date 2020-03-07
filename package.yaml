@@ -30,6 +30,8 @@ library:
   dependencies:
   - optparse-applicative
   - unix
+  - path
+  - path-io
   - megaparsec
   - text
   - utf8-string

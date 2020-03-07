@@ -14,8 +14,11 @@ import Todo.Logger (Log (..))
 import qualified Todo.Logger as Logger
 import Options.Applicative
 import Numeric.Natural
-import System.Posix (UserEntry (..), FileMode, getLoginName, getUserEntryForName, fileExist, createFile, closeFd, unionFileModes, ownerReadMode, ownerWriteMode, groupReadMode, groupWriteMode, otherReadMode)
+import System.Posix (FileMode, fileExist, createFile, closeFd, unionFileModes, ownerReadMode, ownerWriteMode, groupReadMode, groupWriteMode, otherReadMode)
+import Path (Path, Abs, File, Dir, parent, toFilePath)
+import Path.IO (getCurrentDir, getHomeDir, resolveFile)
 import Control.Monad (when)
+import Control.Monad.IO.Class (MonadIO, liftIO)
 
 data Command
   = Add !String
@@ -31,12 +34,15 @@ data Todo = Todo
   , cmd :: !Command
   } deriving (Eq, Show)
 
+defaultSourceName :: String
+defaultSourceName = ".todo"
+
 todo :: Parser Todo
 todo = Todo <$> (optional $ strOption
                 (  long "source"
                 <> short 's'
                 <> metavar "FILE"
-                <> help ("Specify a storage file") ))
+                <> help ("Specify a storage file. (Default) Find " <> defaultSourceName <> " from the current directory to the parent directory until the user home.") ))
             <*> (hsubparser
                 $  addCommand
                 <> listCommand
@@ -71,15 +77,31 @@ versionCommand = command "version" (info (pure Version) (progDesc "Print version
 dispatch :: IO ()
 dispatch = do
   Todo {source, cmd} <- execParser todoOptions
-  filepath <- sourceHandler source
+  filepath <- detect source
   checkSource filepath
   commandDispatch filepath cmd
 
-sourceHandler :: Maybe FilePath -> IO String
-sourceHandler (Just filepath) = return filepath
-sourceHandler Nothing = do
-  UserEntry {homeDirectory} <- getLoginName >>= getUserEntryForName
-  return $ homeDirectory <> "/.todo"
+detect :: MonadIO m => Maybe FilePath -> m FilePath
+detect (Just filepath) = return filepath
+detect Nothing = do
+  home <- getHomeDir
+  current <- getCurrentDir
+  path <- detect' current home
+  return $ toFilePath path
+
+sourcePath :: MonadIO m => Path Abs Dir -> m (Path Abs File)
+sourcePath dir = resolveFile dir defaultSourceName
+
+detect' :: MonadIO m => Path Abs Dir -> Path Abs Dir -> m (Path Abs File)
+detect' cur top = do
+  path <- sourcePath cur
+  exist <- liftIO $ fileExist $ toFilePath $ path
+  if
+    (cur /= top) && (not exist)
+  then
+    detect' (parent cur) top
+  else
+    sourcePath cur
 
 checkSource :: FilePath -> IO ()
 checkSource source = do
