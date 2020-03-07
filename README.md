@@ -21,6 +21,12 @@ Available commands:
   version                  Print version
 ```
 
+## storage detect behavior
+- file specified by `-s`
+- `.todo` in local directory
+- `.todo` in parent directories until user's home
+- `.todo` in user's home
+
 ## auto completion
 
 - for `bash`
