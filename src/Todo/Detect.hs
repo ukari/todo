@@ -1,4 +1,4 @@
-module Todo.IO
+module Todo.Detect
   ( detect
   , defaultStorageName
   , storagePath

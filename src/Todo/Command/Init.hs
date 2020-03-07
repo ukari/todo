@@ -4,7 +4,7 @@ module Todo.Command.Init
   ( init
   ) where
 
-import Todo.IO
+import Todo.Detect
 import Todo.Logger (Log (..))
 import qualified Todo.Logger as Logger
 import Prelude hiding (init)

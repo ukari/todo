@@ -11,7 +11,7 @@ import Todo.Command.Gc
 import Todo.Command.Rollback
 import qualified Todo.Command.Init as Init
 import Todo.Command.Version
-import Todo.IO
+import Todo.Detect
 import Todo.Logger (Log (..))
 import qualified Todo.Logger as Logger
 import Options.Applicative
