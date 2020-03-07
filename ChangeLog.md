@@ -1,5 +1,8 @@
 # Changelog for todo
 
+## 0.1.2.0
+- fix bug, use Data.Char.isAlpha for gene to get the same behavior as Data.Char.readLitChar used in megaparsec when parsing special characters in string literals
+
 ## 0.1.1.4
 - fix bug about parse sepcail characters in string literals
 
