@@ -1,5 +1,8 @@
 # Changelog for todo
 
+## 0.1.1.4
+- fix bug about parse sepcail characters in string literals
+
 ## 0.1.1.3
 - refactor
 
