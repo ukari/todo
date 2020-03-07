@@ -6,8 +6,7 @@ A minimalist pure todo list for terminal which could also turns to be impure as 
 Usage: todo [-s|--source FILE] COMMAND
 
 Available options:
-  -s,--source FILE         Specify a storage file. (Default) Find .todo from
-                           local directory to parent until the user home.
+  -s,--source FILE         Specify a storage file
   -h,--help                Show this help text
 
 Available commands:
