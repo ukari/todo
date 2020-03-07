@@ -26,6 +26,24 @@ Available commands:
 - `.todo` in parent directories until user's home
 - `.todo` in user's home
 
+## build & install from source
+
+``` bash
+git clone https://github.com/ukari/todo.git
+cd todo
+stack setup
+stack build
+stack install
+```
+
+### with shared haskell libs (smaller executable size)
+``` bash
+cd todo
+stack clean
+stack build --ghc-options="-dynamic"
+stack install
+```
+
 ## auto completion
 
 - for `bash`
