@@ -9,14 +9,27 @@ module Todo.Generate
 import Todo.Ast
 import Data.Text.Lazy (Text, empty, pack)
 import qualified Data.Text.Lazy as Text
-import Data.Char (isAlpha)
 import Text.InterpolatedString.QM
+
+escapeChars :: [Char]
+escapeChars = [ '\0'
+              , '\a'
+              , '\b'
+              , '\f'
+              , '\n'
+              , '\r'
+              , '\t'
+              , '\v'
+              , '\"'
+            --, '\&' means empty string
+              , '\''
+              , '\\']
 
 gene :: Exp Text -> Text
 gene (Task t) = Text.foldl escape empty t
   where
     escape :: Text -> Char -> Text
-    escape acc cur = if not $ isAlpha cur then acc <> pack ['\\', cur] else acc <> pack [cur]
+    escape acc cur = if elem cur escapeChars then acc <> pack ['\\', cur] else acc <> pack [cur]
 gene (Todo e) = [qm|todo "{gene e}"\n|]
 gene (Undo e) = [qm|undo "{gene e}"\n|]
 gene (Done e) = [qm|done "{gene e}"\n|]
