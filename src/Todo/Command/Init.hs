@@ -9,14 +9,17 @@ import Todo.Logger (Log (..))
 import qualified Todo.Logger as Logger
 import Prelude hiding (init)
 import Path (toFilePath)
-import Path.IO (getCurrentDir)
+import Path.IO (getCurrentDir, getHomeDir)
 import Text.InterpolatedString.QM
 import Control.Monad (when)
 
 init :: IO ()
 init = do
   current <- getCurrentDir
-  path <- storagePath current
+  home <- getHomeDir
+  path <- storagePath $ if current < home
+    then home
+    else current
   filepath <- return $ toFilePath path
   exist <- checkStorage filepath
   when (not exist) $ do

@@ -29,12 +29,11 @@ detect' :: MonadIO m => Path Abs Dir -> Path Abs Dir -> m (Path Abs File)
 detect' cur top = do
   path <- storagePath cur
   exist <- liftIO $ fileExist $ toFilePath $ path
-  if
-    (cur /= top) && (not exist)
-  then
-    detect' (parent cur) top
-  else
-    storagePath cur
+  if (cur < top)
+  then storagePath top
+  else if (cur /= top) && (not exist)
+  then detect' (parent cur) top
+  else storagePath cur
 
 checkStorage :: FilePath -> IO (Bool)
 checkStorage source = do
