@@ -1,6 +1,6 @@
 # Changelog for todo
 
-## 0.1.1.0
+## 0.1.1.1
 - support detect storage file in local directory
 - new command `init`
 
