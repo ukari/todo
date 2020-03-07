@@ -15,7 +15,8 @@ import Data.Either.Combinators
 add :: FilePath -> String -> IO ()
 add filepath task = do
   todo <- return $ Todo $ Task $ pack task
-  ast <- parseFile filepath
-  exps <- return $ evaluate $ ast <> [todo]
+  source <- T.readFile filepath
+  ast <- parse (source <> gene todo) filepath
+  exps <- return $ evaluate $ ast
   whenRight exps (\_ -> T.appendFile filepath $ gene todo)
   Logger.log $ format exps
