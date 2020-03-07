@@ -1,5 +1,8 @@
 # Changelog for todo
 
+## 0.1.1.2
+- bug fix, dead loop in auto detect storage in local directory
+
 ## 0.1.1.1
 - support detect storage file in local directory
 - new command `init`
