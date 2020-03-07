@@ -8,6 +8,7 @@ module Todo.Ast
 import Text.Megaparsec
 import Text.Megaparsec.Char
 import qualified Text.Megaparsec.Char.Lexer as Lexer
+import Data.Char (isSpace)
 import Data.Text.Lazy (Text, pack)
 import Data.Text.Lazy.Encoding (encodeUtf8)
 import Data.ByteString.Lazy.UTF8 (toString)
@@ -32,10 +33,7 @@ deriving instance Ord (Exp Text)
 type Parser = Parsec Void Text
 
 manyLineSpace :: Parser ()
-manyLineSpace = void $ takeWhileP Nothing f
-  where
-    f :: Char -> Bool
-    f x = (x == ' ') || (x == '\n') || (x == '\r') || (x == '\t')
+manyLineSpace = void $ takeWhileP Nothing isSpace
 
 stringLiteral :: Parser Text
 stringLiteral = do
