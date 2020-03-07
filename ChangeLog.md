@@ -1,5 +1,9 @@
 # Changelog for todo
 
+## 0.1.2.1
+- fix bug, parse special characters by using a inner maintained escape char table
+- change space check rule
+
 ## 0.1.2.0
 - fix bug, use Data.Char.isAlpha for gene to get the same behavior as Data.Char.readLitChar used in megaparsec when parsing special characters in string literals
 
